@@ -1,0 +1,45 @@
+# src/graphql/schema.graphql
+type Plant {
+  id: ID!
+  name: String!
+  createdAt: String!
+  operations: [Operation!]!
+}
+
+type Operation {
+  id: ID!
+  name: String!
+  createdAt: String!
+  costs: [Cost!]!
+}
+
+type Cost {
+  id: ID!
+  volumeRange: String!
+  cost: Float!
+  createdAt: String!
+}
+
+type Query {
+  plants: [Plant!]!
+  plant(id: ID!): Plant
+  operationsByPlant(plantId: ID!): [Operation!]!
+}
+
+input CostInput {
+  volumeRange: String!
+  cost: Float!
+}
+
+input OperationInput {
+  name: String!
+  plantId: ID!
+  costs: [CostInput!]!
+}
+
+type Mutation {
+  createPlant(name: String!): Plant!
+  createOperation(data: OperationInput!): Operation!
+  updateOperation(id: ID!, data: OperationInput!): Operation!
+  deleteOperation(id: ID!): Boolean!
+}

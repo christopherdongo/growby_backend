@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // se define en .env
+}
+
+model Planta {
+  id          Int          @id @default(autoincrement())
+  nombre      String
+  operaciones Operacion[]
+}
+
+model Operacion {
+  id               Int               @id @default(autoincrement())
+  nombre           String
+  plantaId         Int
+  planta           Planta            @relation(fields: [plantaId], references: [id])
+  costosIndirectos CostoIndirecto[]
+}
+
+model CostoIndirecto {
+  id          Int       @id @default(autoincrement())
+  rango       String    // Ej: "300kg", "500kg", "1T"
+  costo       Float
+  operacionId Int
+  operacion   Operacion @relation(fields: [operacionId], references: [id])
+}
